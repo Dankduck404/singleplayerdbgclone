@@ -20,12 +20,18 @@ static Color lerpColor(Color a, Color b, float t) {
 // ---------------------------------------------------------------
 MainMenu::MainMenu()
     : fadeAlpha(0.0f), fadeSpeed(0.6f), fadeInDone(false),
-      bgLoaded(false), hoverNew(false), hoverLoad(false)
+      bgLoaded(false), bgTileLoaded(false), hoverNew(false), hoverLoad(false)
 {
     // Try loading a real background image
     if (FileExists("assets/sprites/menu_bg.png")) {
         bgTexture = LoadTexture("assets/sprites/menu_bg.png");
         bgLoaded  = true;
+    }
+
+    // Load background tile overlay
+    if (FileExists("icons/backgroundtile.png")) {
+        bgTile       = LoadTexture("icons/backgroundtile.png");
+        bgTileLoaded = true;
     }
 
     // --- Menu box layout ---
@@ -45,7 +51,8 @@ MainMenu::MainMenu()
 }
 
 MainMenu::~MainMenu() {
-    if (bgLoaded) UnloadTexture(bgTexture);
+    if (bgLoaded)     UnloadTexture(bgTexture);
+    if (bgTileLoaded) UnloadTexture(bgTile);
 }
 
 // ---------------------------------------------------------------
@@ -111,8 +118,7 @@ void MainMenu::update(float delta, GameState& state) {
     // Click handling (no functionality yet — hooked up later)
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (hoverNew) {
-            // TODO: Transition to character creation
-            // state = GameState::CHARACTER_CREATE;
+            state = GameState::CHARACTER_SELECT;
         }
         if (hoverLoad) {
             // TODO: Load save file
@@ -163,6 +169,16 @@ void MainMenu::drawBackground() const {
             DrawLine(x, baseY - h1 / 2, x, SCREEN_HEIGHT, { 12, 4, 4, 255 });
             // Front ridge (slightly lighter)
             DrawLine(x, SCREEN_HEIGHT - h2 / 2, x, SCREEN_HEIGHT, { 22, 6, 4, 255 });
+        }
+    }
+
+    // --- Tiled background tile at 40% opacity ---
+    if (bgTileLoaded && bgTile.width > 0 && bgTile.height > 0) {
+        Color tint = { 255, 255, 255, 102 }; // 102 / 255 ≈ 40%
+        for (int ty = 0; ty < SCREEN_HEIGHT; ty += bgTile.height) {
+            for (int tx = 0; tx < SCREEN_WIDTH; tx += bgTile.width) {
+                DrawTexture(bgTile, tx, ty, tint);
+            }
         }
     }
 }

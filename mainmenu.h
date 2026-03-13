@@ -19,6 +19,8 @@ private:
     // Background
     Texture2D bgTexture;        // Loaded from assets/sprites/menu_bg.png if present
     bool      bgLoaded;
+    Texture2D bgTile;           // Tiled overlay from icons/backgroundtile.png
+    bool      bgTileLoaded;
 
     // Menu boxes
     Rectangle newGameBox;
