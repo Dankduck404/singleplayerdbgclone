@@ -33,10 +33,11 @@ void CharSelect::update(float delta, GameState& state) {
         }
     }
 
-    // ESC returns to main menu
-    if (IsKeyPressed(KEY_ESCAPE)) {
+    // Keyboard navigation
+    if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))
         state = GameState::MAIN_MENU;
-    }
+    if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT))
+        state = GameState::POINT_SELECT;
 }
 
 // ── Draw helpers ──────────────────────────────────────────────────────────────
@@ -136,6 +137,6 @@ void CharSelect::draw() const {
     drawTitle();
     drawBoxes();
 
-    // ESC hint
-    DrawText("ESC — Back to Menu", 14, SCREEN_HEIGHT - 26, 16, { 80, 25, 10, 140 });
+    // Navigation hints
+    DrawText("ESC / A / \x11 — Back to Menu     D / \x10 — Next", 14, SCREEN_HEIGHT - 26, 16, { 80, 25, 10, 140 });
 }

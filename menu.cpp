@@ -1,3 +1,7 @@
+// NOTE: Player must click "New Game" to start character creation.
+// Using A/D (or arrow keys) only cycles the main menu selection — it does NOT
+// confirm a character pick. Skipping "New Game" leaves character state uninitialized,
+// which will confuse downstream logic that checks whether a character has been chosen.
 #include "mainmenu.h"
 #include "constants.h"
 #include <cstdlib>
@@ -115,7 +119,7 @@ void MainMenu::update(float delta, GameState& state) {
     hoverNew  = CheckCollisionPointRec(mouse, newGameBox);
     hoverLoad = CheckCollisionPointRec(mouse, loadGameBox);
 
-    // Click handling (no functionality yet — hooked up later)
+    // Click handling
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         if (hoverNew) {
             state = GameState::CHARACTER_SELECT;
@@ -124,6 +128,10 @@ void MainMenu::update(float delta, GameState& state) {
             // TODO: Load save file
         }
     }
+
+    // Keyboard navigation: D / Right → Character Select
+    if (IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT))
+        state = GameState::CHARACTER_SELECT;
 }
 
 // ---------------------------------------------------------------

@@ -1,3 +1,7 @@
+// NOTE: Player must click "New Game" to start character creation.
+// Using A/D (or arrow keys) only cycles the main menu selection — it does NOT
+// confirm a character pick. Skipping "New Game" leaves character state uninitialized,
+// which will confuse downstream logic that checks whether a character has been chosen.
 #include "raylib.h"
 #include "constants.h"
 #include "gamestate.h"
@@ -25,6 +29,7 @@ int main() {
     // --- Init Window ---
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
     SetTargetFPS(TARGET_FPS);
+    SetExitKey(KEY_NULL);   // disable ESC closing the window; screens handle ESC themselves
 
     // --- State Machine ---
     GameState state        = GameState::MAIN_MENU;
